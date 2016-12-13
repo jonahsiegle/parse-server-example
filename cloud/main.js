@@ -9,6 +9,8 @@ Parse.Cloud.beforeSave("Activity", function(request, response) {
   var queryActivity = new Parse.Query("Activity");
   queryActivity.equalTo("from_user", newEntryActivity.get("from_user"));
   queryActivity.equalTo("to_user", newEntryActivity.get("to_user"));
+  queryActivity.equalTo("type", newEntryActivity.get("type"));
+
 
   if (newEntryActivity.get("type") == 1) {
     queryActivity.equalTo("target_post", newEntryActivity.get("target_post"));
