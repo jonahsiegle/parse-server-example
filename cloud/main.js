@@ -16,7 +16,11 @@ Parse.Cloud.beforeSave("Activity", function(request, response) {
 
   queryActivity.first({
     success: function(temp) {
+      if (temp) {
         response.error({errorCode:420,errorMsg:"Activity already exist"});
+      } else {
+        response.success();
+      }
     },
     error: function(error) {
       response.success();
