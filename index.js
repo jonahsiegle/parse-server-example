@@ -26,7 +26,8 @@ var api = new ParseServer({
     process.env.S3_SECRET_KEY,
     process.env.S3_BUCKET,
     {directAccess: true}
-  )
+  ),
+  maxUploadSize: process.env.PARSE_SERVER_MAX_UPLOAD_SIZE
 });
 // Client-keys like the javascript key or the .NET key are not necessary with parse-server
 // If you wish you require them, you can set them as options in the initialization above:
