@@ -63,3 +63,4 @@ Parse.Cloud.afterSave("Activity", function(request, response) {
       }
     }
   }
+}
