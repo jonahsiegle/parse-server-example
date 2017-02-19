@@ -69,7 +69,7 @@ Parse.Cloud.afterSave("Activity", function(request, response) {
       }
     });
     //
-    activity.from("to_user").fetch({
+    activity.from("from_user").fetch({
       success: function(user) {
         user.get("counts").fetch({
           success: function(counts) {
