@@ -166,11 +166,11 @@ Parse.Cloud.afterDelete("Post", function(request) {
             counts.save();
           }
         }, error: function(error) {
-          response.error("Got an error.");
+          console.error("Error de incrementing total likes  " + error.code + ": " + error.message);
         }
       });
     }, error: function(error) {
-      response.error("Got an error.");
+      console.error("Error getting counts " + error.code + ": " + error.message);
     }
   });
 
@@ -186,12 +186,12 @@ Parse.Cloud.afterDelete("Post", function(request) {
       Parse.Object.destroyAll(activities, {
         success: function() {},
         error: function(error) {
-          console.error("Error deleting related comments " + error.code + ": " + error.message);
+          console.error("Error deleting related activities " + error.code + ": " + error.message);
         }
       });
     },
     error: function(error) {
-      console.error("Error finding related comments " + error.code + ": " + error.message);
+      console.error("Error finding related actitivities " + error.code + ": " + error.message);
     }
   });
 });
