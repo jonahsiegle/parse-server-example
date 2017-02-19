@@ -154,8 +154,8 @@ Parse.Cloud.afterSave("Post", function(request, response) {
 });
 
 Parse.Cloud.afterDelete("Post", function(request) {
-  var post = request.object;
-  var likeCount = post.get("like_count");
+  // var post = request.object;
+  // var likeCount = post.get("like_count");
 
   // post.get("owner").fetch({
   //   success: function(user) {
