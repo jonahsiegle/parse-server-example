@@ -38,7 +38,8 @@ Parse.Cloud.afterSave("Activity", function(request, response) {
       success: function(user) {
 
         user.get("counts").fetch({
-          success: function(user) {
+          success: function(counts) {
+            counts.increment("total_like_count");
           }, error: function(error) {
           }
         });
