@@ -148,15 +148,15 @@ Parse.Cloud.afterDelete("Activity", function(request) {
 });
 
 Parse.Cloud.afterSave("Post", function(request, response) {
-  var post = request.object;
-   post.get("owner").fetch({
-     success: function(user) {
-       user.increment("posts_count");
-       user.save();
-     }, error: function(error) {
-       console.error("Error getting counts " + error.code + ": " + error.message);
-     }
-   })
+  // var post = request.object;
+  //  post.get("owner").fetch({
+  //    success: function(user) {
+  //      user.increment("posts_count");
+  //      user.save();
+  //    }, error: function(error) {
+  //      console.error("Error getting counts " + error.code + ": " + error.message);
+  //    }
+  //  })
 });
 
 Parse.Cloud.afterDelete("Post", function(request) {
@@ -165,8 +165,8 @@ Parse.Cloud.afterDelete("Post", function(request) {
 
   post.get("owner").fetch({
     success: function(user) {
-      user.increment("posts_count", -1);
-      user.save();
+      // user.increment("posts_count", -1);
+      // user.save();
 
       user.get("counts").fetch({
         success: function(counts) {
