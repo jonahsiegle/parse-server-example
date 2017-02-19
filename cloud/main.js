@@ -34,8 +34,8 @@ Parse.Cloud.afterSave("Activity", function(request, response) {
   var activity = request.object;
   //Write count object
   if (activity.get("type") == 1) {
-    // activity.get("to_user").get("counts").increment("total_like_count");
-    // activity.get("to_user").get("counts").save();
+    activity.get("to_user").counts.increment("total_like_count");
+    activity.get("to_user").counts.("counts").save();
 
     activity.get("target_post").increment("like_count");
     activity.get("target_post").save();
