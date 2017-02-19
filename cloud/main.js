@@ -85,10 +85,6 @@ Parse.Cloud.afterSave("Activity", function(request, response) {
   }
 });
 
-Parse.Cloud.afterSave("Post", function(request, response) {
-
-});
-
 Parse.Cloud.afterDelete("Activity", function(request) {
   var activity = request.object;
   //Write count object
@@ -149,4 +145,53 @@ Parse.Cloud.afterDelete("Activity", function(request) {
       }
     });
   }
+});
+
+Parse.Cloud.afterSave("Post", function(request, response) {
+  var post = request.object;
+  post.get("owner").increment("posts_count")
+  post.get("owner")save();
+});
+
+Parse.Cloud.afterDelete("Post", function(request) {
+  var post = request.object;
+  var likeCount = post.get("like_count");
+
+  post.get("owner").fetch({
+    success: function(user) {
+      user.get("counts").fetch({
+        success: function(counts) {
+          if (counts.get("total_like_count") > 0) {
+            counts.increment("total_like_count", -likeCount);
+            counts.save();
+          }
+        }, error: function(error) {
+          response.error("Got an error.");
+        }
+      });
+    }, error: function(error) {
+      response.error("Got an error.");
+    }
+  });
+
+  post.get("owner").increment("posts_count", -1)
+  post.get("owner").save();
+
+  //Remove all activity
+  query = new Parse.Query("Activity");
+  query.equalTo("target_post", post);
+
+  query.find({
+    success: function(activities) {
+      Parse.Object.destroyAll(activities, {
+        success: function() {},
+        error: function(error) {
+          console.error("Error deleting related comments " + error.code + ": " + error.message);
+        }
+      });
+    },
+    error: function(error) {
+      console.error("Error finding related comments " + error.code + ": " + error.message);
+    }
+  });
 });
