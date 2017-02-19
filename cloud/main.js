@@ -37,8 +37,8 @@ Parse.Cloud.afterSave("Activity", function(request, response) {
     // activity.get("to_user").get("counts").increment("total_like_count");
     // activity.get("to_user").get("counts").save();
 
-    // activity.get("target_post").increment("like_count");
-    // activity.get("target_post").save();
+    activity.get("target_post").increment("like_count");
+    activity.get("target_post").save();
   } else if (activity.get("type") == 2) {
     activity.get("to_user").get("counts").increment("follower_count");
     activity.get("to_user").get("counts").save();
