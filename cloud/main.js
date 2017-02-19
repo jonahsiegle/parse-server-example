@@ -149,7 +149,7 @@ Parse.Cloud.afterDelete("Activity", function(request) {
 
 Parse.Cloud.afterSave("Post", function(request, response) {
   var post = request.object;
-  post.get("owner").increment("posts_count")
+  post.get("owner").increment("posts_count");
   post.get("owner")save();
 });
 
