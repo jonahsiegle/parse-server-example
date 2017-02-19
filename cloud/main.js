@@ -87,7 +87,7 @@ Parse.Cloud.afterSave("Activity", function(request, response) {
 
 Parse.Cloud.afterSave("Post", function(request, response) {
 
-}
+});
 
 Parse.Cloud.afterDelete("Activity", function(request) {
   var activity = request.object;
@@ -97,10 +97,10 @@ Parse.Cloud.afterDelete("Activity", function(request) {
       success: function(user) {
         user.get("counts").fetch({
           success: function(counts) {
-            // if (counts.get("total_like_count") > 0) {
+            if (counts.get("total_like_count") > 0) {
               counts.increment("total_like_count", -1);
               counts.save();
-            // }
+            }
           }, error: function(error) {
             response.error("Got an error.");
           }
@@ -110,19 +110,19 @@ Parse.Cloud.afterDelete("Activity", function(request) {
       }
     });
 
-    // if (activity.get("target_post").get("like_count") > 0) {
+    if (activity.get("target_post").get("like_count") > 0) {
       activity.get("target_post").increment("like_count", -1);
       activity.get("target_post").save();
-    // }
+    }
   } else if (activity.get("type") == 2) {
     activity.get("to_user").fetch({
       success: function(user) {
         user.get("counts").fetch({
           success: function(counts) {
-            // if (counts.get("follower_count") > 0) {
+            if (counts.get("follower_count") > 0) {
               counts.increment("follower_count", -1);
               counts.save();
-            // }
+            }
           }, error: function(error) {
             response.error("Got an error.");
           }
@@ -136,10 +136,10 @@ Parse.Cloud.afterDelete("Activity", function(request) {
       success: function(user) {
         user.get("counts").fetch({
           success: function(counts) {
-            // if (counts.get("following_count") > 0) {
+            if (counts.get("following_count") > 0) {
               counts.increment("following_count", -1);
               counts.save();
-            // }
+            }
           }, error: function(error) {
             response.error("Got an error.");
           }
@@ -149,4 +149,4 @@ Parse.Cloud.afterDelete("Activity", function(request) {
       }
     });
   }
-}
+});
