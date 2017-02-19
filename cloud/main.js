@@ -69,19 +69,19 @@ Parse.Cloud.afterSave("Activity", function(request, response) {
       }
     });
     //
-    // activity.from("to_user").fetch({
-    //   success: function(user) {
-    //     user.get("counts").fetch({
-    //       success: function(counts) {
-    //         counts.increment("following_count");
-    //         counts.save();
-    //       }, error: function(error) {
-    //         response.error("Got an error.");
-    //       }
-    //     });
-    //   }, error: function(error) {
-    //     response.error("Got an error.");
-    //   }
-    // });
+    activity.from("to_user").fetch({
+      success: function(user) {
+        user.get("counts").fetch({
+          success: function(counts) {
+            counts.increment("following_count");
+            counts.save();
+          }, error: function(error) {
+            response.error("Got an error.");
+          }
+        });
+      }, error: function(error) {
+        response.error("Got an error.");
+      }
+    });
   }
 });
