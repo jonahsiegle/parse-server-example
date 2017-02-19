@@ -41,6 +41,7 @@ Parse.Cloud.afterSave("Activity", function(request, response) {
           success: function(counts) {
             counts.increment("total_like_count");
           }, error: function(error) {
+            response.error({errorCode:420,errorMsg:"Activity already exist"});
           }
         });
         // user.get("counts").increment("total_like_count");
