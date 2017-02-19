@@ -149,49 +149,49 @@ Parse.Cloud.afterDelete("Activity", function(request) {
 
 Parse.Cloud.afterSave("Post", function(request, response) {
   var post = request.object;
-  // post.get("owner").increment("posts_count");
-  // post.get("owner")save();
+   post.get("owner").increment("posts_count");
+   post.get("owner").save();
 });
 
-// Parse.Cloud.afterDelete("Post", function(request) {
-//   // var post = request.object;
-//   // var likeCount = post.get("like_count");
-//
-//   // post.get("owner").fetch({
-//   //   success: function(user) {
-//   //     user.get("counts").fetch({
-//   //       success: function(counts) {
-//   //         if (counts.get("total_like_count") > 0) {
-//   //           counts.increment("total_like_count", -likeCount);
-//   //           counts.save();
-//   //         }
-//   //       }, error: function(error) {
-//   //         console.error("Error de incrementing total likes  " + error.code + ": " + error.message);
-//   //       }
-//   //     });
-//   //   }, error: function(error) {
-//   //     console.error("Error getting counts " + error.code + ": " + error.message);
-//   //   }
-//   // });
-//   //
-//   // post.get("owner").increment("posts_count", -1)
-//   // post.get("owner").save();
-//   //
-//   // //Remove all activity
-//   // query = new Parse.Query("Activity");
-//   // query.equalTo("target_post", post);
-//   //
-//   // query.find({
-//   //   success: function(activities) {
-//   //     Parse.Object.destroyAll(activities, {
-//   //       success: function() {},
-//   //       error: function(error) {
-//   //         console.error("Error deleting related activities " + error.code + ": " + error.message);
-//   //       }
-//   //     });
-//   //   },
-//   //   error: function(error) {
-//   //     console.error("Error finding related actitivities " + error.code + ": " + error.message);
-//   //   }
-//   // });
-// });
+Parse.Cloud.afterDelete("Post", function(request) {
+  var post = request.object;
+  var likeCount = post.get("like_count");
+
+  post.get("owner").fetch({
+    success: function(user) {
+      user.get("counts").fetch({
+        success: function(counts) {
+          if (counts.get("total_like_count") > 0) {
+            counts.increment("total_like_count", -likeCount);
+            counts.save();
+          }
+        }, error: function(error) {
+          console.error("Error de incrementing total likes  " + error.code + ": " + error.message);
+        }
+      });
+    }, error: function(error) {
+      console.error("Error getting counts " + error.code + ": " + error.message);
+    }
+  });
+
+  post.get("owner").increment("posts_count", -1)
+  post.get("owner").save();
+
+  //Remove all activity
+  query = new Parse.Query("Activity");
+  query.equalTo("target_post", post);
+
+  query.find({
+    success: function(activities) {
+      Parse.Object.destroyAll(activities, {
+        success: function() {},
+        error: function(error) {
+          console.error("Error deleting related activities " + error.code + ": " + error.message);
+        }
+      });
+    },
+    error: function(error) {
+      console.error("Error finding related actitivities " + error.code + ": " + error.message);
+    }
+  });
+});
