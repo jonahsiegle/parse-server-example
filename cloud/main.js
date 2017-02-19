@@ -36,7 +36,7 @@ Parse.Cloud.afterSave("Activity", function(request, response) {
   if (activity.get("type") == 1) {
     activity.get("to_user").get("counts").increment("total_like_count");
     activity.get("to_user").get("counts").save();
-    
+
     activity.get("target_post").increment("like_count")
     activity.get("target_post").save();
   } else if (activity.get("type") == 2) {
@@ -46,5 +46,4 @@ Parse.Cloud.afterSave("Activity", function(request, response) {
     activity.get("from_user").get("counts").increment("following_count");
     activity.get("from_user").get("counts").save();
   }
-}
 });
