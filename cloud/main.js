@@ -31,36 +31,37 @@ Parse.Cloud.beforeSave("Activity", function(request, response) {
 });
 
 Parse.Cloud.afterSave("Activity", function(request, response) {
-  var activity = request.object;
-  //Write count object
-  if (activity.get("cc") == true {
-    var queryToCount = new Parse.Query("Count");
-    queryToCount.equalTo("owner", activity.get("to_user"));
-    queryToCount.first({
-      success: function(fetchedCount) {
-        if (activity.get("type") == 1 {
-          fetchedCount.increment("total_like_count");
-        } else if (activity.get("type") == 2 {
-          fetchedCount.increment("follower_count");
-        }
-        fetchedCount.save();
-      }, error: function(error) {
-        console.error("Got an error " + error.code + " : " + error.message);
-      }
-    }
-
-    if (activity.get("type") == 2 {
-      var queryFromCount = new Parse.Query("Count");
-      queryFromCount.equalTo("owner", activity.get("from_user"));
-
-      queryFromCount.first({
-        success: function(fetchedCount) {
-          fetchedCount.increment("following_count");
-          fetchedCount.save();
-        }, error: function(error) {
-          console.error("Got an error " + error.code + " : " + error.message);
-        }
-      }
-    }
-  }
+  // var activity = request.object;
+  // //Write count object
+  // if (activity.get("cc") == true) {
+  //   var queryToCount = new Parse.Query("Count");
+  //   queryToCount.equalTo("owner", activity.get("to_user"));
+  //   queryToCount.first({
+  //     success: function(fetchedCount) {
+  //       if (activity.get("type") == 1) {
+  //         fetchedCount.increment("total_like_count");
+  //         activity
+  //       } else if (activity.get("type") == 2) {
+  //         fetchedCount.increment("follower_count");
+  //       }
+  //       fetchedCount.save();
+  //     }, error: function(error) {
+  //       console.error("Got an error " + error.code + " : " + error.message);
+  //     }
+  //   }
+  //
+  //   if (activity.get("type") == 2) {
+  //     var queryFromCount = new Parse.Query("Count");
+  //     queryFromCount.equalTo("owner", activity.get("from_user"));
+  //
+  //     queryFromCount.first({
+  //       success: function(fetchedCount) {
+  //         fetchedCount.increment("following_count");
+  //         fetchedCount.save();
+  //       }, error: function(error) {
+  //         console.error("Got an error " + error.code + " : " + error.message);
+  //       }
+  //     }
+  //   }
+  // }
 }
