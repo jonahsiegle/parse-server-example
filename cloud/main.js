@@ -36,7 +36,6 @@ Parse.Cloud.afterSave("Activity", function(request, response) {
   if (activity.get("type") == 1) {
     activity.get("to_user").fetch({
       success: function(user) {
-
         user.get("counts").fetch({
           success: function(counts) {
             counts.increment("total_like_count");
@@ -45,7 +44,6 @@ Parse.Cloud.afterSave("Activity", function(request, response) {
             response.error("Got an error.");
           }
         });
-        // user.get("counts").increment("total_like_count");
       }, error: function(error) {
         response.error("Got an error.");
       }
@@ -53,11 +51,37 @@ Parse.Cloud.afterSave("Activity", function(request, response) {
 
     activity.get("target_post").increment("like_count");
     activity.get("target_post").save();
-  } else if (activity.get("type") == 2) {
-    activity.get("to_user").get("counts").increment("follower_count");
-    activity.get("to_user").get("counts").save();
 
-    activity.get("from_user").get("counts").increment("following_count");
-    activity.get("from_user").get("counts").save();
+  } else if (activity.get("type") == 2) {
+
+    activity.get("to_user").fetch({
+      success: function(user) {
+        user.get("counts").fetch({
+          success: function(counts) {
+            counts.increment("follower_count");
+            counts.save();
+          }, error: function(error) {
+            response.error("Got an error.");
+          }
+        });
+      }, error: function(error) {
+        response.error("Got an error.");
+      }
+    });
+
+    activity.from("to_user").fetch({
+      success: function(user) {
+        user.get("counts").fetch({
+          success: function(counts) {
+            counts.increment("following_count");
+            counts.save();
+          }, error: function(error) {
+            response.error("Got an error.");
+          }
+        });
+      }, error: function(error) {
+        response.error("Got an error.");
+      }
+    });
   }
 });
