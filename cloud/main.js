@@ -53,7 +53,7 @@ Parse.Cloud.afterSave("Activity", function(request, response) {
       var queryFromCount = new Parse.Query("Count");
       queryFromCount.equalTo("owner", activity.get("from_user"));
 
-      queryToCount.first({
+      queryFromCount.first({
         success: function(fetchedCount) {
           fetchedCount.increment("following_count");
           fetchedCount.save();
