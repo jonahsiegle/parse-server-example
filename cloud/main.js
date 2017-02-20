@@ -148,26 +148,41 @@ Parse.Cloud.afterDelete("Activity", function(request) {
 });
 
 Parse.Cloud.afterSave("Post", function(request, response) {
-  // var post = request.object;
-  //  post.get("owner").fetch({
-  //    success: function(user) {
-  //      user.increment("posts_count");
-  //      user.save();
-  //    }, error: function(error) {
-  //      console.error("Error getting counts " + error.code + ": " + error.message);
-  //    }
-  //  })
+   var post = request.object;
+
+   Parse.Cloud.useMasterKey();
+    var query = new Parse.Query(Parse.User);
+    query.equalTo("objectId", post.get("owner").objectId);
+    query.first({
+      success: function(object) {
+        object.increment("posts_count");
+        object.save();
+      }, error: function(error) {
+        console.error("Error getting counts " + error.code + ": " + error.message);
+      }
+    });
 });
 
 Parse.Cloud.afterDelete("Post", function(request) {
   var post = request.object;
   var likeCount = post.get("like_count");
 
+   Parse.Cloud.useMasterKey();
+    var query = new Parse.Query(Parse.User);
+    query.equalTo("objectId", post.get("owner").objectId);
+    query.first({
+      success: function(object) {
+        if (object.get("posts_count") > 0) {
+          object.increment("posts_count", -1);
+        }
+        object.save();
+      }, error: function(error) {
+        console.error("Error getting counts " + error.code + ": " + error.message);
+      }
+    });
+
   post.get("owner").fetch({
     success: function(user) {
-      // user.increment("posts_count", -1);
-      // user.save();
-
       user.get("counts").fetch({
         success: function(counts) {
           if (counts.get("total_like_count") > 0) {
